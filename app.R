@@ -1,5 +1,5 @@
-# Weather Data Visualization - Interactive Shiny Application
-# Based on PRD requirements for educational weather data exploration
+# Visualisasi Data Cuaca - Aplikasi Shiny Interaktif
+# Berdasarkan kebutuhan PRD untuk eksplorasi data cuaca edukatif
 
 # Load required libraries
 library(shiny)
@@ -18,7 +18,7 @@ load_weather_data <- function() {
     
     # Validate data structure
     if (ncol(data) != 22) {
-      stop("Data file does not contain expected 22 columns")
+      stop("File data tidak mengandung 22 kolom yang diharapkan")
     }
     
     # Convert categorical variables to factors
@@ -30,7 +30,7 @@ load_weather_data <- function() {
     
     return(data)
   }, error = function(e) {
-    stop(paste("Error loading data:", e$message))
+    stop(paste("Kesalahan saat memuat data:", e$message))
   })
 }
 
@@ -38,33 +38,33 @@ load_weather_data <- function() {
 get_variable_info <- function() {
   list(
     continuous = list(
-      "Temperature" = c("MinTemp" = "Minimum Temperature (°C)",
-                       "MaxTemp" = "Maximum Temperature (°C)",
-                       "Temp9am" = "Temperature 9AM (°C)",
-                       "Temp3pm" = "Temperature 3PM (°C)"),
+      "Suhu" = c("MinTemp" = "Suhu Minimum (°C)",
+                 "MaxTemp" = "Suhu Maksimum (°C)",
+                 "Temp9am" = "Suhu Pukul 09.00 (°C)",
+                 "Temp3pm" = "Suhu Pukul 15.00 (°C)"),
       
-      "Precipitation" = c("Rainfall" = "Rainfall (mm)",
-                         "Evaporation" = "Evaporation (mm)",
-                         "RISK_MM" = "Risk Rainfall (mm)"),
+      "Presipitasi" = c("Rainfall" = "Curah Hujan (mm)",
+                        "Evaporation" = "Evaporasi (mm)",
+                        "RISK_MM" = "Risiko Curah Hujan (mm)"),
       
-      "Wind" = c("WindGustSpeed" = "Wind Gust Speed (km/h)",
-                "WindSpeed9am" = "Wind Speed 9AM (km/h)",
-                "WindSpeed3pm" = "Wind Speed 3PM (km/h)"),
+      "Angin" = c("WindGustSpeed" = "Kecepatan Hembusan Angin (km/jam)",
+                  "WindSpeed9am" = "Kecepatan Angin Pukul 09.00 (km/jam)",
+                  "WindSpeed3pm" = "Kecepatan Angin Pukul 15.00 (km/jam)"),
       
-      "Atmospheric" = c("Sunshine" = "Sunshine (hours)",
-                       "Humidity9am" = "Humidity 9AM (%)",
-                       "Humidity3pm" = "Humidity 3PM (%)",
-                       "Pressure9am" = "Pressure 9AM (hPa)",
-                       "Pressure3pm" = "Pressure 3PM (hPa)",
-                       "Cloud9am" = "Cloud Cover 9AM (oktas)",
-                       "Cloud3pm" = "Cloud Cover 3PM (oktas)")
+      "Atmosfer" = c("Sunshine" = "Sinar Matahari (jam)",
+                     "Humidity9am" = "Kelembapan Pukul 09.00 (%)",
+                     "Humidity3pm" = "Kelembapan Pukul 15.00 (%)",
+                     "Pressure9am" = "Tekanan Udara Pukul 09.00 (hPa)",
+                     "Pressure3pm" = "Tekanan Udara Pukul 15.00 (hPa)",
+                     "Cloud9am" = "Tutupan Awan Pukul 09.00 (oktas)",
+                     "Cloud3pm" = "Tutupan Awan Pukul 15.00 (oktas)")
     ),
     
-    categorical = c("WindGustDir" = "Wind Gust Direction",
-                   "WindDir9am" = "Wind Direction 9AM",
-                   "WindDir3pm" = "Wind Direction 3PM",
-                   "RainToday" = "Rain Today",
-                   "RainTomorrow" = "Rain Tomorrow")
+    categorical = c("WindGustDir" = "Arah Hembusan Angin",
+                   "WindDir9am" = "Arah Angin Pukul 09.00",
+                   "WindDir3pm" = "Arah Angin Pukul 15.00",
+                   "RainToday" = "Hujan Hari Ini",
+                   "RainTomorrow" = "Hujan Besok")
   )
 }
 
@@ -87,8 +87,8 @@ get_variable_choices <- function() {
   }
   
   list(
-    "Continuous Variables" = continuous_choices,
-    "Categorical Variables" = categorical_choices
+    "Variabel Kontinu" = continuous_choices,
+    "Variabel Kategorikal" = categorical_choices
   )
 }
 
@@ -104,17 +104,17 @@ get_chart_recommendations <- function(x_var, y_var, data) {
   if (x_is_continuous && y_is_continuous) {
     return(list(
       recommended = "scatter",
-      message = "📊 Recommended: Scatter Plot - Perfect for exploring relationships between two continuous variables. Look for correlations, trends, and outliers."
+      message = "📊 Rekomendasi: Diagram Sebar - Sempurna untuk mengeksplorasi hubungan antara dua variabel kontinu. Cari korelasi, tren, dan data outlier."
     ))
   } else if ((!x_is_continuous && y_is_continuous) || (x_is_continuous && !y_is_continuous)) {
     return(list(
       recommended = "bar",
-      message = "📊 Recommended: Bar Chart - Ideal for comparing values across categories. Use this to see how numerical values vary by group."
+      message = "📊 Rekomendasi: Diagram Batang - Ideal untuk membandingkan nilai antar kategori. Gunakan untuk melihat bagaimana nilai numerik bervariasi per kelompok."
     ))
   } else {
     return(list(
       recommended = "bar",
-      message = "📊 Recommended: Bar Chart - Great for frequency analysis of categorical data."
+      message = "📊 Rekomendasi: Diagram Batang - Bagus untuk analisis frekuensi data kategorikal."
     ))
   }
 }
@@ -124,50 +124,50 @@ weather_data <- load_weather_data()
 
 # Define UI
 ui <- dashboardPage(
-  dashboardHeader(title = "Interactive Weather Data Visualization"),
+  dashboardHeader(title = "Visualisasi Data Cuaca Interaktif"),
   
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Visualization", tabName = "viz", icon = icon("chart-line")),
-      menuItem("Data Table", tabName = "data", icon = icon("table")),
-      menuItem("Help", tabName = "help", icon = icon("question-circle"))
+      menuItem("Visualisasi", tabName = "viz", icon = icon("chart-line")),
+      menuItem("Tabel Data", tabName = "data", icon = icon("table")),
+      menuItem("Bantuan", tabName = "help", icon = icon("question-circle"))
     ),
     
     # Variable Selection
     div(style = "padding: 20px;",
-      h4("Variable Selection"),
+      h4("Pemilihan Variabel"),
       
-      selectInput("x_variable", 
-                 "X-Axis Variable:",
+      selectInput("x_variable",
+                 "Variabel Sumbu-X:",
                  choices = get_variable_choices(),
                  selected = "MaxTemp"),
       
-      selectInput("y_variable", 
-                 "Y-Axis Variable:",
+      selectInput("y_variable",
+                 "Variabel Sumbu-Y:",
                  choices = get_variable_choices(),
                  selected = "MinTemp"),
       
       # Chart Type Selection
-      h4("Chart Type"),
-      radioButtons("chart_type", 
-                  "Select Visualization:",
+      h4("Jenis Grafik"),
+      radioButtons("chart_type",
+                  "Pilih Visualisasi:",
                   choices = list(
-                    "Scatter Plot" = "scatter",
-                    "Line Plot" = "line", 
-                    "Bar Chart" = "bar"
+                    "Diagram Sebar" = "scatter",
+                    "Diagram Garis" = "line",
+                    "Diagram Batang" = "bar"
                   ),
                   selected = "scatter"),
       
       # Additional Options
-      h4("Options"),
-      checkboxInput("show_trend", "Show Trend Line", FALSE),
-      checkboxInput("group_data", "Group by Rain Today", FALSE),
+      h4("Opsi Tambahan"),
+      checkboxInput("show_trend", "Tampilkan Garis Tren", FALSE),
+      checkboxInput("group_data", "Kelompokkan berdasarkan Hujan Hari Ini", FALSE),
       
       # Download Options
       br(),
-      downloadButton("download_plot", "Download Plot", class = "btn-primary"),
+      downloadButton("download_plot", "Unduh Grafik", class = "btn-primary"),
       br(), br(),
-      downloadButton("download_data", "Download Data", class = "btn-secondary")
+      downloadButton("download_data", "Unduh Data", class = "btn-secondary")
     )
   ),
   
@@ -177,7 +177,7 @@ ui <- dashboardPage(
       tabItem(tabName = "viz",
         fluidRow(
           box(width = 12, status = "primary",
-            h3("Interactive Weather Data Visualization"),
+            h3("Visualisasi Data Cuaca Interaktif"),
             div(id = "recommendation", 
                 style = "background-color: #e3f2fd; padding: 10px; margin-bottom: 15px; border-radius: 5px;",
                 textOutput("chart_recommendation")
@@ -190,14 +190,14 @@ ui <- dashboardPage(
             plotlyOutput("main_plot", height = "500px")
           ),
           
-          box(width = 3, status = "info", title = "Variable Information",
-            h4("Selected Variables:"),
+          box(width = 3, status = "info", title = "Informasi Variabel",
+            h4("Variabel Terpilih:"),
             verbatimTextOutput("variable_info"),
             
-            h4("Summary Statistics:"),
+            h4("Statistik Ringkasan:"),
             tableOutput("summary_stats"),
             
-            h4("Educational Notes:"),
+            h4("Catatan Edukatif:"),
             div(style = "font-size: 12px; color: #666;",
                 textOutput("educational_notes")
             )
@@ -208,9 +208,9 @@ ui <- dashboardPage(
       # Data Table Tab
       tabItem(tabName = "data",
         fluidRow(
-          box(width = 12, status = "primary", title = "Weather Dataset",
-            p("This table contains 366 daily weather observations with 22 variables. 
-              Use the search, sort, and filter features to explore the data."),
+          box(width = 12, status = "primary", title = "Dataset Cuaca",
+            p("Tabel ini berisi 366 pengamatan cuaca harian dengan 22 variabel.
+              Gunakan fitur pencarian, sortir, dan filter untuk mengeksplorasi data."),
             DT::dataTableOutput("data_table")
           )
         )
@@ -219,43 +219,43 @@ ui <- dashboardPage(
       # Help Tab
       tabItem(tabName = "help",
         fluidRow(
-          box(width = 12, status = "primary", title = "Help & Instructions",
-            h3("Getting Started"),
-            p("This application helps you explore weather data through interactive visualizations."),
+          box(width = 12, status = "primary", title = "Bantuan & Petunjuk",
+            h3("Memulai"),
+            p("Aplikasi ini membantu Anda mengeksplorasi data cuaca melalui visualisasi interaktif."),
             
-            h4("How to Use:"),
+            h4("Cara Penggunaan:"),
             tags$ol(
-              tags$li("Select variables from the sidebar dropdowns"),
-              tags$li("Choose a chart type that matches your data"),
-              tags$li("Interact with plots by hovering, zooming, and panning"),
-              tags$li("Use the Data Table tab to examine raw data"),
-              tags$li("Download plots and data for your assignments")
+              tags$li("Pilih variabel dari dropdown di sidebar"),
+              tags$li("Pilih jenis grafik yang sesuai dengan data Anda"),
+              tags$li("Berinteraksi dengan grafik dengan cara mengarahkan kursor, zoom, dan geser"),
+              tags$li("Gunakan tab Tabel Data untuk memeriksa data mentah"),
+              tags$li("Unduh grafik dan data untuk tugas Anda")
             ),
             
-            h4("Chart Types:"),
+            h4("Jenis Grafik:"),
             tags$ul(
-              tags$li(strong("Scatter Plot:"), " Best for exploring relationships between two continuous variables"),
-              tags$li(strong("Line Plot:"), " Ideal for showing trends and patterns over sequences"),
-              tags$li(strong("Bar Chart:"), " Perfect for comparing categories or showing distributions")
+              tags$li(strong("Diagram Sebar:"), " Terbaik untuk mengeksplorasi hubungan antara dua variabel kontinu"),
+              tags$li(strong("Diagram Garis:"), " Ideal untuk menunjukkan tren dan pola dalam urutan data"),
+              tags$li(strong("Diagram Batang:"), " Sempurna untuk membandingkan kategori atau menunjukkan distribusi")
             ),
             
-            h4("Dataset Information:"),
-            p("The dataset contains 366 daily weather observations from Porto, Portugal with the following variable categories:"),
+            h4("Informasi Dataset:"),
+            p("Dataset ini berisi 366 pengamatan cuaca harian dari Porto, Portugal dengan kategori variabel berikut:"),
             
-            h5("Temperature Variables:"),
-            p("MinTemp, MaxTemp, Temp9am, Temp3pm (all in °C)"),
+            h5("Variabel Suhu:"),
+            p("MinTemp, MaxTemp, Temp9am, Temp3pm (semua dalam °C)"),
             
-            h5("Precipitation Variables:"),
-            p("Rainfall, Evaporation, RISK_MM (all in mm)"),
+            h5("Variabel Presipitasi:"),
+            p("Rainfall, Evaporation, RISK_MM (semua dalam mm)"),
             
-            h5("Wind Variables:"),
-            p("WindGustSpeed, WindSpeed9am, WindSpeed3pm (km/h), WindGustDir, WindDir9am, WindDir3pm"),
+            h5("Variabel Angin:"),
+            p("WindGustSpeed, WindSpeed9am, WindSpeed3pm (km/jam), WindGustDir, WindDir9am, WindDir3pm"),
             
-            h5("Atmospheric Variables:"),
-            p("Sunshine (hours), Humidity9am/3pm (%), Pressure9am/3pm (hPa), Cloud9am/3pm (oktas)"),
+            h5("Variabel Atmosfer:"),
+            p("Sunshine (jam), Humidity9am/3pm (%), Pressure9am/3pm (hPa), Cloud9am/3pm (oktas)"),
             
-            h5("Rain Indicators:"),
-            p("RainToday, RainTomorrow (Yes/No)")
+            h5("Indikator Hujan:"),
+            p("RainToday, RainTomorrow (Ya/Tidak)")
           )
         )
       )
@@ -307,8 +307,8 @@ server <- function(input, output, session) {
       input$y_variable
     }
     
-    paste0("X-Axis: ", input$x_variable, " (", x_desc, ")",
-           "\nY-Axis: ", input$y_variable, " (", y_desc, ")")
+    paste0("Sumbu-X: ", input$x_variable, " (", x_desc, ")",
+           "\nSumbu-Y: ", input$y_variable, " (", y_desc, ")")
   })
   
   # Summary statistics
@@ -321,10 +321,10 @@ server <- function(input, output, session) {
       
       if (is.numeric(x_data) && is.numeric(y_data)) {
         data.frame(
-          Variable = c(input$x_variable, input$y_variable),
-          Mean = round(c(mean(x_data, na.rm = TRUE), mean(y_data, na.rm = TRUE)), 2),
+          Variabel = c(input$x_variable, input$y_variable),
+          Rata2 = round(c(mean(x_data, na.rm = TRUE), mean(y_data, na.rm = TRUE)), 2),
           Median = round(c(median(x_data, na.rm = TRUE), median(y_data, na.rm = TRUE)), 2),
-          SD = round(c(sd(x_data, na.rm = TRUE), sd(y_data, na.rm = TRUE)), 2)
+          StandarDeviasi = round(c(sd(x_data, na.rm = TRUE), sd(y_data, na.rm = TRUE)), 2)
         )
       }
     }
@@ -335,9 +335,9 @@ server <- function(input, output, session) {
     chart_type <- input$chart_type
     
     notes <- switch(chart_type,
-      "scatter" = "Look for patterns: positive/negative correlations, clusters, or outliers. Strong correlations suggest relationships between variables.",
-      "line" = "Examine trends: are values increasing, decreasing, or cyclical? Look for seasonal patterns or unusual peaks/valleys.",
-      "bar" = "Compare heights: which categories have the highest/lowest values? Look for patterns across different groups."
+      "scatter" = "Cari pola: korelasi positif/negatif, kelompok data, atau outlier. Korelasi kuat menunjukkan hubungan antar variabel.",
+      "line" = "Periksa tren: apakah nilai meningkat, menurun, atau siklis? Cari pola musiman atau puncak/lembah yang tidak biasa.",
+      "bar" = "Bandingkan tinggi: kategori mana yang memiliki nilai tertinggi/terendah? Cari pola antar kelompok yang berbeda."
     )
     
     notes
@@ -348,8 +348,8 @@ server <- function(input, output, session) {
     data <- filtered_data()
     
     if (nrow(data) == 0) {
-      return(plotly_empty() %>% 
-             layout(title = "No data available for selected variables"))
+      return(plotly_empty() %>%
+             layout(title = "Tidak ada data tersedia untuk variabel yang dipilih"))
     }
     
     # Create base plot
@@ -379,7 +379,7 @@ server <- function(input, output, session) {
         p <- p + geom_line(color = "#3498db", size = 1)
       }
       
-      p <- p + labs(x = "Observation Index")
+      p <- p + labs(x = "Indeks Pengamatan")
       
     } else if (input$chart_type == "bar") {
       # Determine if we need aggregation
@@ -396,12 +396,12 @@ server <- function(input, output, session) {
           
           p <- ggplot(agg_data, aes_string(x = input$y_variable, y = "mean_val"))
           p <- p + geom_col(fill = "#3498db", alpha = 0.8)
-          p <- p + labs(y = paste("Mean", input$x_variable))
+          p <- p + labs(y = paste("Rata-rata", input$x_variable))
         } else {
           # Both continuous - create histogram
           p <- ggplot(data, aes_string(x = input$x_variable))
           p <- p + geom_histogram(fill = "#3498db", alpha = 0.8, bins = 20)
-          p <- p + labs(y = "Frequency")
+          p <- p + labs(y = "Frekuensi")
         }
       } else {
         # X is categorical
@@ -413,7 +413,7 @@ server <- function(input, output, session) {
           
           p <- ggplot(agg_data, aes_string(x = input$x_variable, y = "mean_val"))
           p <- p + geom_col(fill = "#3498db", alpha = 0.8)
-          p <- p + labs(y = paste("Mean", input$y_variable))
+          p <- p + labs(y = paste("Rata-rata", input$y_variable))
         } else {
           # Both categorical - frequency count
           count_data <- data %>%
@@ -421,7 +421,7 @@ server <- function(input, output, session) {
           
           p <- ggplot(count_data, aes_string(x = input$x_variable, y = "count"))
           p <- p + geom_col(fill = "#3498db", alpha = 0.8)
-          p <- p + labs(y = "Count")
+          p <- p + labs(y = "Jumlah")
         }
       }
       
@@ -481,7 +481,7 @@ server <- function(input, output, session) {
       }
       
       p <- p + theme_minimal() +
-        labs(title = paste("Weather Data:", input$y_variable, "vs", input$x_variable))
+        labs(title = paste("Data Cuaca:", input$y_variable, "vs", input$x_variable))
       
       ggsave(file, plot = p, device = "png", width = 10, height = 6, dpi = 300)
     }
