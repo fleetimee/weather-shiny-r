@@ -124,7 +124,7 @@ weather_data <- load_weather_data()
 
 # Define UI
 ui <- dashboardPage(
-  dashboardHeader(title = "Visualisasi Data Cuaca Interaktif"),
+  dashboardHeader(title = "Novian Andika Visualization"),
   
   dashboardSidebar(
     sidebarMenu(
@@ -177,7 +177,7 @@ ui <- dashboardPage(
       tabItem(tabName = "viz",
         fluidRow(
           box(width = 12, status = "primary",
-            h3("Visualisasi Data Cuaca Interaktif"),
+            h3("Novian Andika Visualization - Data Cuaca Interaktif"),
             div(id = "recommendation", 
                 style = "background-color: #e3f2fd; padding: 10px; margin-bottom: 15px; border-radius: 5px;",
                 textOutput("chart_recommendation")
