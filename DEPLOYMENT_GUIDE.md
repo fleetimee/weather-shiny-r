@@ -5,6 +5,7 @@ This guide provides step-by-step instructions for deploying your Indonesian Shin
 ## 📋 Table of Contents
 
 - [Quick Start - shinyapps.io (Recommended)](#quick-start---shinyappsio-recommended)
+- [Posit Connect Cloud Deployment](#posit-connect-cloud-deployment)
 - [Alternative Hosting Options](#alternative-hosting-options)
 - [Deployment Preparation](#deployment-preparation)
 - [Troubleshooting](#troubleshooting)
@@ -63,6 +64,60 @@ rsconnect::deployApp(
 
 After deployment, your app will be available at:
 `https://your-username.shinyapps.io/indonesian-weather-viz/`
+
+## 🌟 Posit Connect Cloud Deployment
+
+**Excellent choice for R users and educational institutions**
+
+### ✅ What is Posit Connect Cloud?
+
+- **Professional R hosting** platform by Posit (formerly RStudio)
+- **Optimized for R applications** including Shiny
+- **Educational discounts** often available
+- **Enterprise-grade** infrastructure
+
+### 🚀 Quick Deployment Steps
+
+1. **Create Posit Connect Cloud account** at [posit.cloud](https://posit.cloud)
+
+2. **Configure rsconnect:**
+
+```r
+# Install rsconnect if needed
+install.packages("rsconnect")
+
+# Add your Posit Connect Cloud server
+rsconnect::addServer(
+  url = "https://your-account.posit.cloud/",
+  name = "posit-cloud"
+)
+
+# Authenticate (opens browser)
+rsconnect::connectUser(server = "posit-cloud")
+```
+
+3. **Deploy your app:**
+
+```r
+rsconnect::deployApp(
+  appName = "indonesian-weather-viz",
+  appTitle = "Indonesian Weather Visualization",
+  server = "posit-cloud",
+  forceUpdate = TRUE
+)
+```
+
+### 📋 Required Files
+
+- ✅ [`app.R`](app.R) - Main application
+- ✅ [`Opo.csv`](Opo.csv) - Weather dataset
+- ✅ [`manifest.json`](manifest.json) - Deployment configuration (provided)
+
+### 📚 Detailed Guide
+
+For complete Posit Connect Cloud instructions, see **[POSIT_CONNECT_GUIDE.md](POSIT_CONNECT_GUIDE.md)**
+
+---
 
 ## 🌐 Alternative Hosting Options
 

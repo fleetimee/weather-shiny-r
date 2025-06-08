@@ -153,3 +153,156 @@ print(file_status)
    - Consider upgrading plan if needed
 
 ## 📝 Manifest.json Explanation
+
+The `manifest.json` file tells Posit Connect Cloud:
+
+```json
+{
+  "version": 1,                    // Manifest format version
+  "metadata": {
+    "appmode": "shiny",           // Application type
+    "entrypoint": "app.R"         // Main application file
+  },
+  "packages": {                   // Required R packages with versions
+    "R": [...]
+  },
+  "files": {                      // Files to include in deployment
+    "app.R": {"checksum": "auto"},
+    "Opo.csv": {"checksum": "auto"}
+  }
+}
+```
+
+## 🔄 Updating Your App
+
+To update an existing deployment:
+
+```r
+# Make your changes to app.R or other files
+# Then redeploy with forceUpdate = TRUE
+rsconnect::deployApp(
+  appName = "indonesian-weather-viz",
+  server = "posit-cloud",
+  forceUpdate = TRUE
+)
+```
+
+## 📊 Monitoring Your App
+
+### Check App Status
+
+```r
+# List your deployed applications
+rsconnect::applications(server = "posit-cloud")
+
+# Get app usage statistics (if available)
+rsconnect::showLogs(
+  appName = "indonesian-weather-viz",
+  server = "posit-cloud"
+)
+```
+
+### Performance Monitoring
+
+- Monitor app performance in Posit Connect Cloud dashboard
+- Check for memory usage warnings
+- Review error logs if app crashes
+
+## 💰 Posit Connect Cloud Pricing
+
+### Free Tier
+
+- Limited computational hours
+- Basic hosting features
+- Good for educational projects
+
+### Paid Plans
+
+- More computational resources
+- Better performance guarantees
+- Advanced features and support
+
+## 🔒 Security and Privacy
+
+### Data Security
+
+- Weather data is public (no privacy concerns)
+- Use HTTPS (automatically provided)
+- Regular security updates by Posit
+
+### Access Control
+
+- Apps can be made public or private
+- Share specific URLs with students
+- Control access through Posit Connect Cloud settings
+
+## 🎓 Educational Use Benefits
+
+### For Students
+
+- **Easy access** via web browser
+- **No local R installation** required
+- **Consistent experience** across devices
+- **Always up-to-date** version
+
+### For Educators
+
+- **Centralized hosting** for all students
+- **Usage monitoring** capabilities
+- **Easy sharing** with class links
+- **Professional presentation**
+
+## 📞 Getting Help
+
+### Posit Support Resources
+
+- [Posit Connect Cloud Documentation](https://docs.posit.co/connect-cloud/)
+- [RStudio Community](https://community.rstudio.com/)
+- [Posit Support](https://support.posit.co/)
+
+### Common Commands Reference
+
+```r
+# List servers
+rsconnect::servers()
+
+# List applications
+rsconnect::applications()
+
+# Remove an application
+rsconnect::terminateApp(
+  appName = "indonesian-weather-viz",
+  server = "posit-cloud"
+)
+
+# Show deployment logs
+rsconnect::showLogs(
+  appName = "indonesian-weather-viz",
+  server = "posit-cloud"
+)
+```
+
+## ✅ Deployment Checklist
+
+Before deploying, verify:
+
+- [ ] All files present (`app.R`, `Opo.csv`, `manifest.json`)
+- [ ] App runs locally without errors
+- [ ] Posit Connect Cloud account configured
+- [ ] Required packages installed locally
+- [ ] Internet connection stable
+
+## 🎉 Success!
+
+Once deployed successfully:
+
+1. **Test your live app** thoroughly
+2. **Share the URL** with students/colleagues
+3. **Monitor usage** in your dashboard
+4. **Update as needed** using the deployment commands
+
+Your Indonesian Weather Visualization app is now live on Posit Connect Cloud! 🌤️📊
+
+---
+
+**Need help?** Check the troubleshooting section above or refer to [DEPLOYMENT_TROUBLESHOOTING.md](DEPLOYMENT_TROUBLESHOOTING.md) for additional solutions.
