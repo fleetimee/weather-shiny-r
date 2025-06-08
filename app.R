@@ -373,10 +373,10 @@ server <- function(input, output, session) {
       p <- ggplot(data, aes_string(x = "Index", y = input$y_variable))
       
       if (input$group_data && "RainToday" %in% names(data)) {
-        p <- p + geom_line(aes(color = RainToday), size = 1)
+        p <- p + geom_line(aes(color = RainToday), linewidth = 1)
         p <- p + scale_color_manual(values = c("No" = "#3498db", "Yes" = "#e74c3c"))
       } else {
-        p <- p + geom_line(color = "#3498db", size = 1)
+        p <- p + geom_line(color = "#3498db", linewidth = 1)
       }
       
       p <- p + labs(x = "Indeks Pengamatan")

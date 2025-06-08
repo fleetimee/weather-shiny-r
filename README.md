@@ -304,6 +304,44 @@ This educational application is provided for learning purposes. The weather data
 - Download functionality
 - Help system and documentation
 
+## 🌐 Online Deployment
+
+This Shiny application can be deployed online for easy access by students and colleagues. See our deployment documentation:
+
+### Quick Deployment (Recommended)
+
+**Deploy to shinyapps.io in minutes:**
+
+```r
+# Run the automated deployment script
+source("deploy_to_shinyapps.R")
+```
+
+### Deployment Resources
+
+- **[DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)** - Complete step-by-step deployment instructions
+- **[HOSTING_OPTIONS.md](HOSTING_OPTIONS.md)** - Comparison of hosting platforms
+- **[deploy_to_shinyapps.R](deploy_to_shinyapps.R)** - Automated deployment script
+
+### Hosting Options Summary
+
+| Platform         | Difficulty  | Cost      | Best For             |
+| ---------------- | ----------- | --------- | -------------------- |
+| **shinyapps.io** | ⭐ Easy     | Free/Paid | Education, Beginners |
+| **Heroku**       | ⭐⭐ Medium | Free/Paid | Developers           |
+| **DigitalOcean** | ⭐⭐⭐ Hard | $5+/month | Production           |
+
+### Why Deploy Online?
+
+- **Easy sharing** with students and colleagues
+- **No local setup** required for users
+- **Always accessible** from any device
+- **Professional presentation** for portfolios
+
+For detailed instructions, see [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md).
+
 ---
 
 **Happy Data Exploring! 📊🌤️**
+
+_Ready to deploy? Start with [shinyapps.io deployment guide](DEPLOYMENT_GUIDE.md#quick-start---shinyappsio-recommended) for the easiest online hosting solution!_

@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "metadata": {
+    "appmode": "shiny",
+    "entrypoint": "app.R"
+  },
+  "locale": "en_US.UTF-8",
+  "packages": {
+    "R": [
+      {
+        "package": "shiny",
+        "version": "1.7.4",
+        "source": "CRAN"
+      },
+      {
+        "package": "shinydashboard",
+        "version": "0.7.2",
+        "source": "CRAN"
+      },
+      {
+        "package": "DT",
+        "version": "0.28",
+        "source": "CRAN"
+      },
+      {
+        "package": "plotly",
+        "version": "4.10.2",
+        "source": "CRAN"
+      },
+      {
+        "package": "dplyr",
+        "version": "1.1.2",
+        "source": "CRAN"
+      },
+      {
+        "package": "ggplot2",
+        "version": "3.4.2",
+        "source": "CRAN"
+      },
+      {
+        "package": "readr",
+        "version": "2.1.4",
+        "source": "CRAN"
+      },
+      {
+        "package": "shinyWidgets",
+        "version": "0.7.6",
+        "source": "CRAN"
+      }
+    ]
+  },
+  "files": {
+    "app.R": {
+      "checksum": "auto"
+    },
+    "Opo.csv": {
+      "checksum": "auto"
+    }
+  },
+  "environment": {
+    "R_VERSION": "4.3.0"
+  }
+}
