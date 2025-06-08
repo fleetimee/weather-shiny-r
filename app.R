@@ -1,7 +1,4 @@
-# Visualisasi Data Cuaca - Aplikasi Shiny Interaktif
-# Berdasarkan kebutuhan PRD untuk eksplorasi data cuaca edukatif
 
-# Load required libraries
 library(shiny)
 library(shinydashboard)
 library(DT)
@@ -11,21 +8,17 @@ library(ggplot2)
 library(readr)
 library(shinyWidgets)
 
-# Load and prepare data
 load_weather_data <- function() {
   tryCatch({
     data <- read_csv("Opo.csv", show_col_types = FALSE)
     
-    # Validate data structure
     if (ncol(data) != 22) {
       stop("File data tidak mengandung 22 kolom yang diharapkan")
     }
     
-    # Convert categorical variables to factors
     categorical_vars <- c("WindGustDir", "WindDir9am", "WindDir3pm", "RainToday", "RainTomorrow")
     data[categorical_vars] <- lapply(data[categorical_vars], as.factor)
     
-    # Add row numbers for identification
     data$ID <- 1:nrow(data)
     
     return(data)
@@ -34,7 +27,6 @@ load_weather_data <- function() {
   })
 }
 
-# Define variable categories and metadata
 get_variable_info <- function() {
   list(
     continuous = list(
@@ -68,11 +60,9 @@ get_variable_info <- function() {
   )
 }
 
-# Get all variable choices for dropdowns
 get_variable_choices <- function() {
   var_info <- get_variable_info()
   
-  # Create choices with actual column names as values and descriptions as labels
   continuous_choices <- c()
   for (category in names(var_info$continuous)) {
     category_vars <- var_info$continuous[[category]]
@@ -92,7 +82,6 @@ get_variable_choices <- function() {
   )
 }
 
-# Educational content
 get_chart_recommendations <- function(x_var, y_var, data) {
   var_info <- get_variable_info()
   all_continuous <- unlist(var_info$continuous, use.names = TRUE)
@@ -119,10 +108,8 @@ get_chart_recommendations <- function(x_var, y_var, data) {
   }
 }
 
-# Load data
 weather_data <- load_weather_data()
 
-# Define UI
 ui <- dashboardPage(
   dashboardHeader(title = "Novian Andika Visualization"),
   
@@ -133,7 +120,6 @@ ui <- dashboardPage(
       menuItem("Bantuan", tabName = "help", icon = icon("question-circle"))
     ),
     
-    # Variable Selection
     div(style = "padding: 20px;",
       h4("Pemilihan Variabel"),
       
@@ -147,7 +133,6 @@ ui <- dashboardPage(
                  choices = get_variable_choices(),
                  selected = "MinTemp"),
       
-      # Chart Type Selection
       h4("Jenis Grafik"),
       radioButtons("chart_type",
                   "Pilih Visualisasi:",
@@ -158,12 +143,10 @@ ui <- dashboardPage(
                   ),
                   selected = "scatter"),
       
-      # Additional Options
       h4("Opsi Tambahan"),
       checkboxInput("show_trend", "Tampilkan Garis Tren", FALSE),
       checkboxInput("group_data", "Kelompokkan berdasarkan Hujan Hari Ini", FALSE),
       
-      # Download Options
       br(),
       downloadButton("download_plot", "Unduh Grafik", class = "btn-primary"),
       br(), br(),
@@ -173,7 +156,6 @@ ui <- dashboardPage(
   
   dashboardBody(
     tabItems(
-      # Visualization Tab
       tabItem(tabName = "viz",
         fluidRow(
           box(width = 12, status = "primary",
@@ -205,7 +187,6 @@ ui <- dashboardPage(
         )
       ),
       
-      # Data Table Tab
       tabItem(tabName = "data",
         fluidRow(
           box(width = 12, status = "primary", title = "Dataset Cuaca",
@@ -216,7 +197,6 @@ ui <- dashboardPage(
         )
       ),
       
-      # Help Tab
       tabItem(tabName = "help",
         fluidRow(
           box(width = 12, status = "primary", title = "Bantuan & Petunjuk",
@@ -263,14 +243,11 @@ ui <- dashboardPage(
   )
 )
 
-# Define Server
 server <- function(input, output, session) {
   
-  # Reactive data filtering
   filtered_data <- reactive({
     data <- weather_data
     
-    # Remove rows with NA values for selected variables
     if (input$x_variable %in% names(data) && input$y_variable %in% names(data)) {
       data <- data[!is.na(data[[input$x_variable]]) & !is.na(data[[input$y_variable]]), ]
     }
@@ -278,19 +255,16 @@ server <- function(input, output, session) {
     return(data)
   })
   
-  # Chart recommendation
   output$chart_recommendation <- renderText({
     recommendation <- get_chart_recommendations(input$x_variable, input$y_variable, weather_data)
     recommendation$message
   })
   
-  # Variable information
   output$variable_info <- renderText({
     var_info <- get_variable_info()
     all_continuous <- unlist(var_info$continuous, use.names = TRUE)
     all_categorical <- var_info$categorical
     
-    # Get descriptions for selected variables
     x_desc <- if(input$x_variable %in% names(all_continuous)) {
       all_continuous[input$x_variable]
     } else if(input$x_variable %in% names(all_categorical)) {
@@ -311,7 +285,6 @@ server <- function(input, output, session) {
            "\nSumbu-Y: ", input$y_variable, " (", y_desc, ")")
   })
   
-  # Summary statistics
   output$summary_stats <- renderTable({
     data <- filtered_data()
     
@@ -330,7 +303,6 @@ server <- function(input, output, session) {
     }
   })
   
-  # Educational notes
   output$educational_notes <- renderText({
     chart_type <- input$chart_type
     
@@ -343,7 +315,6 @@ server <- function(input, output, session) {
     notes
   })
   
-  # Main plot
   output$main_plot <- renderPlotly({
     data <- filtered_data()
     
@@ -352,7 +323,6 @@ server <- function(input, output, session) {
              layout(title = "Tidak ada data tersedia untuk variabel yang dipilih"))
     }
     
-    # Create base plot
     if (input$chart_type == "scatter") {
       p <- ggplot(data, aes_string(x = input$x_variable, y = input$y_variable))
       
@@ -368,7 +338,6 @@ server <- function(input, output, session) {
       }
       
     } else if (input$chart_type == "line") {
-      # Create line plot with data indices
       data$Index <- 1:nrow(data)
       p <- ggplot(data, aes_string(x = "Index", y = input$y_variable))
       
@@ -382,14 +351,11 @@ server <- function(input, output, session) {
       p <- p + labs(x = "Indeks Pengamatan")
       
     } else if (input$chart_type == "bar") {
-      # Determine if we need aggregation
       var_info <- get_variable_info()
       all_continuous <- unlist(var_info$continuous, use.names = FALSE)
       
       if (input$x_variable %in% names(all_continuous)) {
-        # X is continuous, Y should be categorical for bar chart
         if (input$y_variable %in% var_info$categorical) {
-          # Aggregate continuous by categorical
           agg_data <- data %>%
             group_by(!!sym(input$y_variable)) %>%
             summarise(mean_val = mean(!!sym(input$x_variable), na.rm = TRUE), .groups = 'drop')
@@ -398,15 +364,12 @@ server <- function(input, output, session) {
           p <- p + geom_col(fill = "#3498db", alpha = 0.8)
           p <- p + labs(y = paste("Rata-rata", input$x_variable))
         } else {
-          # Both continuous - create histogram
           p <- ggplot(data, aes_string(x = input$x_variable))
           p <- p + geom_histogram(fill = "#3498db", alpha = 0.8, bins = 20)
           p <- p + labs(y = "Frekuensi")
         }
       } else {
-        # X is categorical
         if (input$y_variable %in% names(all_continuous)) {
-          # Categorical X, continuous Y
           agg_data <- data %>%
             group_by(!!sym(input$x_variable)) %>%
             summarise(mean_val = mean(!!sym(input$y_variable), na.rm = TRUE), .groups = 'drop')
@@ -415,7 +378,6 @@ server <- function(input, output, session) {
           p <- p + geom_col(fill = "#3498db", alpha = 0.8)
           p <- p + labs(y = paste("Rata-rata", input$y_variable))
         } else {
-          # Both categorical - frequency count
           count_data <- data %>%
             count(!!sym(input$x_variable), name = "count")
           
@@ -428,7 +390,6 @@ server <- function(input, output, session) {
       p <- p + theme(axis.text.x = element_text(angle = 45, hjust = 1))
     }
     
-    # Apply theme
     p <- p + theme_minimal() +
       theme(
         plot.title = element_text(size = 14, face = "bold"),
@@ -438,14 +399,12 @@ server <- function(input, output, session) {
         legend.text = element_text(size = 10)
       )
     
-    # Convert to plotly
     ggplotly(p, tooltip = "all") %>%
       layout(hovermode = "closest") %>%
       config(displayModeBar = TRUE, displaylogo = FALSE,
              modeBarButtonsToRemove = c("pan2d", "select2d", "lasso2d", "autoScale2d"))
   })
   
-  # Data table
   output$data_table <- DT::renderDataTable({
     DT::datatable(
       weather_data,
@@ -462,13 +421,11 @@ server <- function(input, output, session) {
     )
   })
   
-  # Download plot
   output$download_plot <- downloadHandler(
     filename = function() {
       paste0("weather_plot_", Sys.Date(), ".png")
     },
     content = function(file) {
-      # Create the plot
       data <- filtered_data()
       
       if (input$chart_type == "scatter") {
@@ -487,7 +444,6 @@ server <- function(input, output, session) {
     }
   )
   
-  # Download data
   output$download_data <- downloadHandler(
     filename = function() {
       paste0("weather_data_", Sys.Date(), ".csv")
@@ -498,5 +454,4 @@ server <- function(input, output, session) {
   )
 }
 
-# Run the application
 shinyApp(ui = ui, server = server)
